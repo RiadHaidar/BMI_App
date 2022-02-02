@@ -1,3 +1,4 @@
+import 'package:bmicalculatorapp/constants.dart';
 import 'package:flutter/material.dart';
 
 
@@ -17,18 +18,7 @@ final void Function() handleWight;
       margin: EdgeInsets.all(15.0),
       decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(25),
-       boxShadow: [
-         BoxShadow(
-               color:Color(0xffE6E6E8),
-                blurRadius: 9.0,
-                spreadRadius: 8.0,
-                offset: Offset(0.0, 0.0),), 
-                BoxShadow(
-               color: Color(0xff2BA1BB),
-                blurRadius: 5.0,
-                spreadRadius: 0.0,
-                offset: Offset(4.0, 4.0),), 
-            ],
+       boxShadow: boxShadowx,
         color:Color(0xffD5D6D8),
        
       ),

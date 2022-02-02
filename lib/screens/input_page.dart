@@ -1,48 +1,22 @@
-import 'package:bmicalculatorapp/textShortcut.dart';
+import 'package:bmicalculatorapp/calculator_brain.dart';
+import 'result.dart';
+import '../components/textShortcut.dart';
 import 'package:flutter/material.dart';
-import 'mycard.dart';
-import 'sex_card.dart';
-import 'button_container.dart';
-import 'expanded_slider.dart';
+import '../components/mycard.dart';
+import '../components/sex_card.dart';
+import '../components/button_container.dart';
+import '../components/expanded_slider.dart';
+import 'package:bmicalculatorapp/constants.dart';
+import 'dart:math';
+ double bmi = weight / pow(sliderValue / 100, 2);
+// double height = 60 ;
+int age = 25;
+double weight = 75;
+double sliderValue = 60;
+CalculatorBrain calculatorBrain = new CalculatorBrain(weight, sliderValue, bmi);
 
-const TextStyle selectionStyle = TextStyle( 
-          fontSize: 20, 
-          fontWeight: FontWeight.bold, 
-          color: Colors.white
-        );
-const TextStyle kgStyle = TextStyle(
-                                    fontFamily: 'Raleway-Black',
-                                    fontSize: 20.0,
-                                    color: Colors.black,
-                                  );
-const Text appTitle = Text(
-    'BMI CALCULATOR',
-    style: TextStyle(color: Colors.black),
-  );
-Color activeCardColor = Color(0xff2BA1BB);
-Color inActiveCardColor = Color(0xffD5D6D8);
-AppBar appBar = AppBar(
-  backgroundColor: Colors.transparent,
-  elevation: 0,
-  title: appTitle,
-  centerTitle: true,
-);
-const cardColor = Color(0xffD5D6D8);
-TextStyle styleOfText = TextStyle(
-  fontFamily: 'Raleway-Black',
-  fontSize: 20,
-  color: Colors.grey[700],
-);
-const TextStyle numberStyle = TextStyle(
-  fontFamily: 'Raleway-Black',
-  // fontWeight: FontWeight.bold,
-  fontSize: 40.0,
-  color: Colors.black,
-);
-
-double sliderValue = 60.0;
-int age=25;
-int weight = 75;
+String finalResult = calculatorBrain.getResult();
+// double squareOfHeight= sliderValue * sliderValue;
 enum Gender { male, female }
 
 class InputPage extends StatefulWidget {
@@ -51,10 +25,17 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
-  Color maleCardColor = activeCardColor;
-  Color femaleCardColor = inActiveCardColor;
-  int detect = 0;
 
+  void calculateResult(){
+   // Navigator.pushNamed(context, ResultPage.resultPageRoute);
+   setState(() {
+       bmi = weight / pow(sliderValue / 100, 2);
+    print(bmi);
+   });
+  //  double x = double.parse( calculatorBrain.calculateBMI());
+  
+  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ResultPage()));
+  }
   Gender? selectedGender;
   @override
   Widget build(BuildContext context) {
@@ -100,27 +81,24 @@ class _InputPageState extends State<InputPage> {
             ],
           ),
           Container(
-         
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Column(
                   children: <Widget>[
-             
                     MyCard(
                       width: 0.4,
                       height: 0.6,
                       color: cardColor,
                       cardChild: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        // crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           TextShortcut('Height', styleOfText),
-                       ExpandedSlider(sliderValue, (double height){
-                         setState(() {
-                           sliderValue = height.round().toDouble();
-                         });
-                       }),
+                          ExpandedSlider(sliderValue, (double height) {
+                            setState(() {
+                             sliderValue= height.round().toDouble();
+                            });
+                          }),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 14),
                             child: TextShortcut(
@@ -149,23 +127,24 @@ class _InputPageState extends State<InputPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               TextShortcut(weight.toString(), numberStyle),
-                              TextShortcut(
-                                  ' kg',kgStyle),
+                              TextShortcut(' kg', kgStyle),
                             ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
-                             buttonContainer(Icons.add,(){
-                               setState(() {
-                                 weight++;
-                               });
-                             }),
-                             buttonContainer(Icons.remove,(){
-                               setState(() {
-                                 weight--;
-                               });
-                             }),
+                              buttonContainer(Icons.add, () {
+                                setState(() {
+                                  //print(weight);
+                                  weight++;
+
+                                });
+                              }),
+                              buttonContainer(Icons.remove, () {
+                                setState(() {
+                                  weight--;
+                                });
+                              }),
                             ],
                           ),
                         ],
@@ -174,7 +153,7 @@ class _InputPageState extends State<InputPage> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.009,
                     ),
-                   MyCard(
+                    MyCard(
                       width: 0.4,
                       height: 0.6 / 2.2,
                       color: cardColor,
@@ -185,24 +164,23 @@ class _InputPageState extends State<InputPage> {
                             height: 25,
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              TextShortcut(age.toString(), numberStyle),
-                            ]  
-                          ),
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                TextShortcut(age.toString(), numberStyle),
+                              ]),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
-                             buttonContainer(Icons.add,(){
-                               setState(() {
-                                 age++;
-                               });
-                             }),
-                             buttonContainer(Icons.remove,(){
-                               setState(() {
-                                age--;
-                               });
-                             }),
+                              buttonContainer(Icons.add, () {
+                                setState(() {
+                                  age++;
+                                });
+                              }),
+                              buttonContainer(Icons.remove, () {
+                                setState(() {
+                                  age--;
+                                });
+                              }),
                             ],
                           ),
                         ],
@@ -214,15 +192,20 @@ class _InputPageState extends State<InputPage> {
             ),
           ),
           Expanded(
-           
-            child: MyCard(width:MediaQuery.of(context).size.width * 0.9, 
-                    height: MediaQuery.of(context).size.height * 0.09, color:activeCardColor, 
-                    cardChild: Center(
-            child: GestureDetector(child: Text('Let\'s Calculate',style: selectionStyle,),
-            onTap: (){},),
-                    ),)),
-
-    
+              child: MyCard(
+            width: MediaQuery.of(context).size.width * 0.9,
+            height: MediaQuery.of(context).size.height * 0.09,
+            color: activeCardColor,
+            cardChild: Center(
+              child: GestureDetector(
+                child: Text(
+                  'Let\'s Calculate',
+                  style: selectionStyle,
+                ),
+                onTap:calculateResult,
+              ),
+            ),
+          )),
         ],
       ),
     );

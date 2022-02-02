@@ -17,4 +17,4 @@ samples, guidance on mobile development, and a full API reference.
 
 
 #simple app for beginners to practice
-#the logic of the app is to calculate your BMI according the the metric body mass index
+#the logic of the app is to calculate your BMI according to the metric body mass index
